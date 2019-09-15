@@ -40,8 +40,8 @@ public class PhaseManager : MonoBehaviour {
  
     private List<GameObject> spawnedNPCs;   // When you need to iterate over a number of agents.
     
-    private int currentMapState = 0;           // This stores which state the map or level is in.
-    private int previousMapState = 0;          // The map state we were just in
+    private int currentMapState = -1;           // This stores which state the map or level is in.
+    private int previousMapState = -1;          // The map state we were just in
 
     public int MapState => currentMapState;
 
@@ -50,18 +50,18 @@ public class PhaseManager : MonoBehaviour {
     public GameObject[] Path;
 
 
-    public Text narrator;                   // 
+    public Text narrator;
 
     // Use this for initialization. Create any initial NPCs here and store them in the 
     // spawnedNPCs list. You can always add/remove NPCs later on.
 
     void Start() {
-        narrator.text = "This is the place to mention major things going on during the demo, the \"narration.\"";
+        narrator.text = "Press a button 0-9 to simulate a dynamic AI movement";
         spawnedNPCs = new List<GameObject>();
-        spawnedNPCs.Add(SpawnItem(spawner1, HunterPrefab, null, SpawnText1, 4));
+        spawnedNPCs.Add(SpawnItem(spawner1, HunterPrefab, PlayerPrefab.GetComponent<NPCController>(), SpawnText1, -1));
 
-        Invoke("SpawnWolf", 12);
-        Invoke("Meeting1", 30);
+        //Invoke("SpawnWolf", 12);
+        //Invoke("Meeting1", 30);
     }
 
     /// <summary>
@@ -72,7 +72,7 @@ public class PhaseManager : MonoBehaviour {
     private void Update() {
 
         string inputstring = Input.inputString;
-        int num;
+        int num = -1;
 
         // Look for a number key click
         if (inputstring.Length > 0)
@@ -89,8 +89,8 @@ public class PhaseManager : MonoBehaviour {
             }
         }
         
-        // Check if a game event had caused a change of state in the level.
-        if (currentMapState == previousMapState)
+        // Check if a game event had caused a change of state in the level or if no input was given.
+        if (previousMapState == num || num == -1)
             return;
 
        // If we get here, we've been given a new map state, from either source
@@ -116,17 +116,19 @@ public class PhaseManager : MonoBehaviour {
 
     private void EnterMapStateZero()
     {
-        narrator.text = "In MapState Zero, we're going to ...";
-
-        //currentMapState = 2; // or whatever. Won't necessarily advance the phase every time
+        narrator.text = "In MapState Zero, we're going to dynamic seek";
+        currentMapState = 0;
+        spawnedNPCs[0].GetComponent<NPCController>().mapState = 0;
+        HunterPrefab.GetComponent<SteeringBehavior>().Seek();
 
         //spawnedNPCs.Add(SpawnItem(spawner2, WolfPrefab, null, SpawnText2, 4));
     }
 
     private void EnterMapStateOne() {
-        narrator.text = "In MapState One, we're going to ...";
-
-        //currentMapState = 2; // or whatever. Won't necessarily advance the phase every time
+        narrator.text = "In MapState One, we're going to dynamic flee";
+        currentMapState = 1;
+        spawnedNPCs[0].GetComponent<NPCController>().mapState = 1;
+        HunterPrefab.GetComponent<SteeringBehavior>().Flee();
 
         //spawnedNPCs.Add(SpawnItem(spawner2, WolfPrefab, null, SpawnText2, 4));
     }

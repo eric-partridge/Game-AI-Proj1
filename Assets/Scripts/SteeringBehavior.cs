@@ -25,6 +25,7 @@ public class SteeringBehavior : MonoBehaviour {
     public float targetRadiusL;
     public float slowRadiusL;
     public float timeToTarget;
+    public float targetSpeedL;
 
     // For Face function
     public float maxRotation;
@@ -45,6 +46,55 @@ public class SteeringBehavior : MonoBehaviour {
     protected void Start() {
         agent = GetComponent<NPCController>();
         //wanderOrientation = agent.orientation;
+    }
+
+    private Vector3 Arrive(Vector3 currVec)
+    {
+        float dis = currVec.magnitude;
+        if (dis < targetRadiusL) {
+            print("Inside targetRadius");
+            return Vector3.zero; 
+        }
+        else if (dis > slowRadiusL) { targetSpeedL = maxAcceleration; }
+        else {
+            print("Reducing target speed")
+;            targetSpeedL = (maxSpeed * dis) / slowRadiusL; 
+        }
+
+        Vector3 returnVel = new Vector3();
+        returnVel = currVec;
+        returnVel.Normalize();
+        returnVel *= targetSpeedL;
+
+        return returnVel;
+    }
+
+    public Vector3 Seek()
+    {
+        Vector3 steering = new Vector3();
+        steering = target.position - agent.position;
+        //print("player pos is: " + target.position);
+        Vector3 targetVel = Arrive(steering);
+        steering = targetVel - target.velocity;
+        steering /= timeToTarget;
+
+        if(steering.magnitude > maxAcceleration)
+        {
+            print("Slowing down");
+            steering.Normalize();
+            steering *= maxAcceleration;
+        }
+        return steering;
+    }
+
+    public Vector3 Flee()
+    {
+        Vector3 steering = new Vector3();
+        steering = agent.position - target.position;
+        print("player pos is: " + target.position);
+        steering.Normalize();
+        steering *= maxAcceleration;
+        return steering;
     }
 
 }

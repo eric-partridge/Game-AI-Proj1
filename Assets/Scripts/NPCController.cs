@@ -18,7 +18,7 @@ public class NPCController : MonoBehaviour {
 
     public float maxSpeed;          // what it says
 
-    public int mapState;            // use this to control which "phase" the demo is in
+    public int mapState = -1;            // use this to control which "phase" the demo is in
 
     private Vector3 linear;         // The resilts of the kinematic steering requested
     private float angular;          // The resilts of the kinematic steering requested
@@ -39,27 +39,32 @@ public class NPCController : MonoBehaviour {
     /// 
     /// </summary>
     void FixedUpdate() {
+        //mapState = ai.GetComponent<SteeringBehavior>().aiAlgo;
+        //print("Map state is: " + mapState);
         switch (mapState) {
-            case 1:
+            case -1:
+                break;
+            case 0:
                 if (label) {
                     // replace "First algorithm" with the name of the actual algorithm you're demoing
                     // do this for each phase
-                    label.text = name.Replace("(Clone)","") + "\nAlgorithm: First algorithm"; 
+                    label.text = name.Replace("(Clone)","") + "\nAlgorithm: Seek"; 
                 }
-                // linear = ai.Pursue();   // For example
-                // angular = ai.Face();    // For example
+                //print("Seeking...");
+                linear = ai.Seek();
+                angular = 0;
 
                 // linear = ai.whatever();  -- replace with the desired calls
                 // angular = ai.whatever();
                 break;
 
-            case 2:
+            case 1:
                 if (label) {
-                    label.text = name.Replace("(Clone)", "") + "\nAlgorithm: Second algorithm";
+                    label.text = name.Replace("(Clone)", "") + "\nAlgorithm: Flee";
                 }
 
-                // linear = ai.whatever();  -- replace with the desired calls
-                // angular = ai.whatever();
+                linear = ai.Flee();
+                angular = 0;
                 break;
 
             case 3:
