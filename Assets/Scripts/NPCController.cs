@@ -14,9 +14,10 @@ public class NPCController : MonoBehaviour {
 
     // For rotation
     public float orientation;       // scalar float for agent's current orientation
-    public float rotation;          // Will be needed for dynamic steering
+    public float rotation;          // Will be needed for dynamic steering, is the angular speed
 
     public float maxSpeed;          // what it says
+    public float maxRotation;       // what it says
 
     public int mapState;            // use this to control which "phase" the demo is in
 
@@ -113,6 +114,18 @@ public class NPCController : MonoBehaviour {
         if (velocity.magnitude > maxSpeed) {
             velocity.Normalize();
             velocity *= maxSpeed;
+        }
+
+        if (Mathf.Abs(rotation) > maxRotation)
+        {
+            if(rotation > 0)
+            {
+                rotation = maxRotation;
+            }
+            else
+            {
+                rotation = -maxRotation;
+            }
         }
 
         rb.AddForce(velocity - rb.velocity, ForceMode.VelocityChange);
