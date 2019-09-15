@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657993, g: 0.49641424, b: 0.57481825, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657993, g: 0.49641407, b: 0.5748179, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -210,6 +210,7 @@ GameObject:
   - component: {fileID: 57836076}
   - component: {fileID: 57836075}
   - component: {fileID: 57836077}
+  - component: {fileID: 57836078}
   m_Layer: 0
   m_Name: PhaseManager
   m_TagString: Untagged
@@ -229,8 +230,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62e8a1fd5de0dc44b88e66ade04a75df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlayerPrefab: {fileID: 1492082692082636, guid: 656f0980c97e88745b50615b4f52aff8,
-    type: 3}
+  PlayerPrefab: {fileID: 1950617231}
   HunterPrefab: {fileID: 1153476826827624, guid: cb9f2757d4b88f94298bd5a6f5de77aa,
     type: 3}
   WolfPrefab: {fileID: 1195697530455450, guid: 0fcd3077ea816ff4d9388e7425919d2b, type: 3}
@@ -353,6 +353,36 @@ LineRenderer:
     generateLightingData: 0
   m_UseWorldSpace: 0
   m_Loop: 0
+--- !u!114 &57836078
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 57836074}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c21e7bc528b1e7b4d93b22c8cef3b897, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  agent: {fileID: 0}
+  target: {fileID: 0}
+  maxPrediction: 0
+  maxAcceleration: 0
+  maxSpeed: 0
+  targetRadiusL: 0
+  slowRadiusL: 0
+  timeToTarget: 0
+  targetSpeedL: 0
+  maxRotation: 0
+  maxAngularAcceleration: 0
+  targetRadiusA: 0
+  slowRadiusA: 0
+  wanderOffset: 0
+  wanderRadius: 0
+  wanderRate: 0
+  Path: []
+  current: 0
 --- !u!1 &97745899
 GameObject:
   m_ObjectHideFlags: 0
@@ -647,8 +677,17 @@ PrefabInstance:
       propertyPath: m_RootOrder
       value: 5
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 114539536265108996, guid: 656f0980c97e88745b50615b4f52aff8, type: 3}
+    - target: {fileID: 114539536265108996, guid: 656f0980c97e88745b50615b4f52aff8,
+        type: 3}
+      propertyPath: maxSpeed
+      value: 150
+      objectReference: {fileID: 0}
+    - target: {fileID: 114855803710573834, guid: 656f0980c97e88745b50615b4f52aff8,
+        type: 3}
+      propertyPath: speed
+      value: 150
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 656f0980c97e88745b50615b4f52aff8, type: 3}
 --- !u!1 &496893634
 GameObject:
@@ -819,7 +858,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 534669902}
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 30, z: 0}
+  m_LocalPosition: {x: 0, y: 48.7, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
