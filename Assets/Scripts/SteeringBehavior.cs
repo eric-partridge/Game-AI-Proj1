@@ -240,13 +240,20 @@ public class SteeringBehavior : MonoBehaviour {
     public Vector3 Seek()
     {
         Vector3 steering = new Vector3();
+
+        //get direction to player
         steering = target.position - agent.position;
+
+        //calculate distance
         float distance = (target.position - agent.position).magnitude;
+
+        //if inside slowRadius, calculate speed using arrive
         if (distance < slowRadiusL)
         {
             Vector3 apporachingAcceleration = DynamicArrive();
             return apporachingAcceleration;
         }
+        //else keep max acceleration
         else {
             steering.Normalize();
             steering *= maxAcceleration;
@@ -257,7 +264,10 @@ public class SteeringBehavior : MonoBehaviour {
 
     public Vector3 Flee()
     {
+
         Vector3 steering = new Vector3();
+
+        //calculate direction away from player and send player away at max acceleration
         steering = agent.position - target.position;
         steering.Normalize();
         steering *= maxAcceleration;
@@ -266,36 +276,62 @@ public class SteeringBehavior : MonoBehaviour {
 
     public float Align()
     {
-        float rotation = target.orientation - agent.orientation;
+        //get direction to target
+        Vector3 direction = target.position - agent.position;
+        float rotation = Mathf.Atan2(direction.x, direction.z) - agent.orientation;
         float targetRotation, steering, rotationDirection;
+
+        //map result to (-pi, pi) interval
         rotation = MapOrientation(rotation);
-        rotationDirection = Mathf.Atan2(target.position.x - agent.position.x, target.position.z - agent.position.z) - agent.orientation;
-        float rotationSize = Mathf.Abs(rotationDirection);
-        print("Rotation " + rotation + " and size: " + rotationSize);
-        if(rotationSize < targetRadiusL) { print("Returning jack shit");  return 0f; }
-        if(rotationSize > slowRadiusL) { targetRotation = maxRotation; }
+        float rotationSize = Mathf.Abs(rotation);
+
+        //check if we are there
+        if(rotationSize < targetRadiusA) { return 0f; }
+
+        //if oiutside slow radius use max rotation
+        if(rotationSize > slowRadiusA) { targetRotation = maxRotation; }
+
+        //otherwise use scaled rotation
         else { targetRotation = maxRotation * (rotationSize / slowRadiusL); }
-        targetRotation *= rotation / slowRadiusL;
+
+        //final target rotation use speed and direction
+        targetRotation *= rotation / rotationSize;
+
+        //acceleration tries to get to the target rotation
         steering = targetRotation - agent.rotation;
 
+        //check if acceleration is too high
         float angularAccel = Mathf.Abs(steering);
         if(angularAccel > maxAngularAcceleration)
         {
             steering /= angularAccel;
             steering *= maxAngularAcceleration;
         }
-        print("Steering is: " + steering);
+       //print("Steering is: " + steering);
         return steering;
     }
 
     public wanderSteering Wander()
     {
+        //update orientation
         wanderOrientation += (Random.value - Random.value) * wanderRate;
+
+        //get target orientation
         float targetOr = agent.orientation + wanderOrientation;
+
+        //get center of wander cirlce
         Vector3 position = agent.position + wanderOffset * new Vector3(Mathf.Sin(agent.orientation), 0, Mathf.Cos(agent.orientation));
+
+        //get target locations
         position += wanderRadius * new Vector3(Mathf.Sin(targetOr), 0, Mathf.Cos(targetOr));
+
+        //create struct to hold output
         wanderSteering ret;
+
+        //dekegate to face
         ret.angular = DynamicFace();
+
+        //set linear acceleration to max
         ret.linear = maxAcceleration * new Vector3(Mathf.Sin(agent.orientation), 0, Mathf.Cos(agent.orientation));
         return ret;
     }

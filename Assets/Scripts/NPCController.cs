@@ -141,7 +141,7 @@ public class NPCController : MonoBehaviour {
             velocity *= maxSpeed;
         }
 
-        if (Mathf.Abs(rotation) > maxRotation)
+        /*if (Mathf.Abs(rotation) > maxRotation)
         {
             if(rotation > 0)
             {
@@ -151,7 +151,7 @@ public class NPCController : MonoBehaviour {
             {
                 rotation = -maxRotation;
             }
-        }
+        }*/
 
         rb.AddForce(velocity - rb.velocity, ForceMode.VelocityChange);
         position = rb.position;
