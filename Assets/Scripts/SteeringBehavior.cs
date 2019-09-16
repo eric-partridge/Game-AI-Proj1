@@ -43,6 +43,12 @@ public class SteeringBehavior : MonoBehaviour {
     public GameObject[] Path;
     public int current = 0;
 
+    public struct wanderSteering
+    {
+        public float angular;
+        public Vector3 linear;
+    }
+
     protected void Start() {
         agent = GetComponent<NPCController>();
         //wanderOrientation = agent.orientation;
@@ -53,7 +59,7 @@ public class SteeringBehavior : MonoBehaviour {
         //get the distance between target and agent
         Vector3 direction = GetDirectionVec();
         float distance = GetDistance();
-
+        print("Checking");
         //distance check
         if(distance < slowRadiusL && distance > targetRadiusL)
         {
@@ -230,42 +236,22 @@ public class SteeringBehavior : MonoBehaviour {
             return i;
         }
     }
-    private Vector3 Arrive(Vector3 currVec)
-    {
-        float dis = currVec.magnitude;
-        if (dis < targetRadiusL) {
-            print("Inside targetRadius");
-            return Vector3.zero; 
-        }
-        else if (dis > slowRadiusL) { targetSpeedL = maxAcceleration; }
-        else {
-            print("Reducing target speed")
-;            targetSpeedL = (maxSpeed * dis) / slowRadiusL; 
-        }
-
-        Vector3 returnVel = new Vector3();
-        returnVel = currVec;
-        returnVel.Normalize();
-        returnVel *= targetSpeedL;
-
-        return returnVel;
-    }
 
     public Vector3 Seek()
     {
         Vector3 steering = new Vector3();
         steering = target.position - agent.position;
-        //print("player pos is: " + target.position);
-        Vector3 targetVel = Arrive(steering);
-        steering = targetVel - target.velocity;
-        steering /= timeToTarget;
-
-        if(steering.magnitude > maxAcceleration)
+        float distance = (target.position - agent.position).magnitude;
+        if (distance < slowRadiusL)
         {
-            print("Slowing down");
+            Vector3 apporachingAcceleration = DynamicArrive();
+            return apporachingAcceleration;
+        }
+        else {
             steering.Normalize();
             steering *= maxAcceleration;
         }
+
         return steering;
     }
 
@@ -273,10 +259,46 @@ public class SteeringBehavior : MonoBehaviour {
     {
         Vector3 steering = new Vector3();
         steering = agent.position - target.position;
-        print("player pos is: " + target.position);
         steering.Normalize();
         steering *= maxAcceleration;
         return steering;
     }
+
+    public float Align()
+    {
+        float rotation = target.orientation - agent.orientation;
+        float targetRotation, steering, rotationDirection;
+        rotation = MapOrientation(rotation);
+        rotationDirection = Mathf.Atan2(target.position.x - agent.position.x, target.position.z - agent.position.z) - agent.orientation;
+        float rotationSize = Mathf.Abs(rotationDirection);
+        print("Rotation " + rotation + " and size: " + rotationSize);
+        if(rotationSize < targetRadiusL) { print("Returning jack shit");  return 0f; }
+        if(rotationSize > slowRadiusL) { targetRotation = maxRotation; }
+        else { targetRotation = maxRotation * (rotationSize / slowRadiusL); }
+        targetRotation *= rotation / slowRadiusL;
+        steering = targetRotation - agent.rotation;
+
+        float angularAccel = Mathf.Abs(steering);
+        if(angularAccel > maxAngularAcceleration)
+        {
+            steering /= angularAccel;
+            steering *= maxAngularAcceleration;
+        }
+        print("Steering is: " + steering);
+        return steering;
+    }
+
+    public wanderSteering Wander()
+    {
+        wanderOrientation += (Random.value - Random.value) * wanderRate;
+        float targetOr = agent.orientation + wanderOrientation;
+        Vector3 position = agent.position + wanderOffset * new Vector3(Mathf.Sin(agent.orientation), 0, Mathf.Cos(agent.orientation));
+        position += wanderRadius * new Vector3(Mathf.Sin(targetOr), 0, Mathf.Cos(targetOr));
+        wanderSteering ret;
+        ret.angular = DynamicFace();
+        ret.linear = maxAcceleration * new Vector3(Mathf.Sin(agent.orientation), 0, Mathf.Cos(agent.orientation));
+        return ret;
+    }
+
 
 }

@@ -130,6 +130,7 @@ MonoBehaviour:
   orientation: 0
   rotation: 0
   maxSpeed: 4
+  maxRotation: 0
   mapState: -1
   label: {fileID: 0}
 --- !u!114 &114839489207466526
@@ -149,8 +150,8 @@ MonoBehaviour:
   maxPrediction: 1
   maxAcceleration: 4
   maxSpeed: 4
-  targetRadiusL: 5
-  slowRadiusL: 10
+  targetRadiusL: 2
+  slowRadiusL: 5
   timeToTarget: 0.5
   targetSpeedL: 0
   maxRotation: 4

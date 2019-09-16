@@ -68,30 +68,50 @@ public class NPCController : MonoBehaviour {
                 angular = 0;
                 break;
 
+            case 2:
+                if (label) {
+                    label.text = name.Replace("(Clone)", "") + "\nAlgorithm: Pursue";
+                }
+
+                linear = ai.DynamicPursue();
+                angular = 0;
+                break;
+
             case 3:
                 if (label) {
-                    label.text = name.Replace("(Clone)", "") + "\nAlgorithm: Third algorithm";
+                    label.text = name.Replace("(Clone)", "") + "\nAlgorithm: Evade";
                 }
 
-                // linear = ai.whatever();  -- replace with the desired calls
-                // angular = ai.whatever();
+                linear = ai.DynamicEvade();
+                angular = 0;
                 break;
-
             case 4:
                 if (label) {
-                    label.text = name.Replace("(Clone)", "") + "\nAlgorithm: Fourth algorithm";
+                    label.text = name.Replace("(Clone)", "") + "\nAlgorithm: Align";
                 }
 
-                // linear = ai.whatever();  -- replace with the desired calls
-                // angular = ai.whatever();
+                linear = Vector3.zero;
+                angular = ai.Align();
                 break;
+
             case 5:
-                if (label) {
-                    label.text = name.Replace("(Clone)", "") + "\nAlgorithm: Fifth algorithm";
+                if (label)
+                {
+                    label.text = name.Replace("(Clone)", "") + "\nAlgorithm: Face";
                 }
 
-                // linear = ai.whatever();  -- replace with the desired calls
-                // angular = ai.whatever();
+                linear = Vector3.zero;
+                angular = ai.DynamicFace();
+                break;
+
+            case 6:
+                if (label)
+                {
+                    label.text = name.Replace("(Clone)", "") + "\nAlgorithm: Wander";
+                }
+
+                linear = ai.Wander().linear;
+                angular = ai.Wander().angular;
                 break;
 
                 // ADD CASES AS NEEDED

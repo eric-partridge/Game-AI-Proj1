@@ -108,10 +108,21 @@ public class PhaseManager : MonoBehaviour {
                break;
 
            case 3:
-               break;
+                EnterMapStateThree();
+                break;
 
-            // ADD MORE CASES AS NEEDED
-       }
+            case 4:
+                EnterMapStateFour();
+                break;
+
+            case 5:
+                EnterMapStateFive();
+                break;
+
+            case 6:
+                EnterMapStateSix();
+                break;
+        }
     }
 
     private void EnterMapStateZero()
@@ -119,35 +130,46 @@ public class PhaseManager : MonoBehaviour {
         narrator.text = "In MapState Zero, we're going to dynamic seek";
         currentMapState = 0;
         spawnedNPCs[0].GetComponent<NPCController>().mapState = 0;
-        HunterPrefab.GetComponent<SteeringBehavior>().Seek();
-
-        //spawnedNPCs.Add(SpawnItem(spawner2, WolfPrefab, null, SpawnText2, 4));
     }
 
     private void EnterMapStateOne() {
-        narrator.text = "In MapState One, we're going to dynamic flee";
+        narrator.text = "In MapState One, we're going to dynamic Flee";
         currentMapState = 1;
         spawnedNPCs[0].GetComponent<NPCController>().mapState = 1;
-        HunterPrefab.GetComponent<SteeringBehavior>().Flee();
-
-        //spawnedNPCs.Add(SpawnItem(spawner2, WolfPrefab, null, SpawnText2, 4));
     }
 
     private void EnterMapStateTwo()
     {
-        narrator.text = "Entering MapState Two";
-
-        currentMapState = 3; // or whatever. Won't necessarily advance the phase every time
-
-        //spawnedNPCs.Add(SpawnItem(spawner2, WolfPrefab, null, SpawnText2, 4));
+        narrator.text = "In MapState Two, we're going to dynamic Pursue";
+        currentMapState = 2;
+        spawnedNPCs[0].GetComponent<NPCController>().mapState = 2;
     }
     private void EnterMapStateThree()
     {
-        narrator.text = "Entering MapState Three";
+        narrator.text = "In MapState Three, we're going to dynamic Evade";
+        currentMapState = 3;
+        spawnedNPCs[0].GetComponent<NPCController>().mapState = 3;
+    }
 
-        currentMapState = 2; // or whatever. Won't necessarily advance the phase every time
+    private void EnterMapStateFour()
+    {
+        narrator.text = "In MapState Four, we're going to dynamic Align";
+        currentMapState = 4;
+        spawnedNPCs[0].GetComponent<NPCController>().mapState = 4;
+    }
 
-        //spawnedNPCs.Add(SpawnItem(spawner2, WolfPrefab, null, SpawnText2, 4));
+    private void EnterMapStateFive()
+    {
+        narrator.text = "In MapState Five, we're going to dynamic Face";
+        currentMapState = 5;
+        spawnedNPCs[0].GetComponent<NPCController>().mapState = 5;
+    }
+
+    private void EnterMapStateSix()
+    {
+        narrator.text = "In MapState Six, we're going to dynamic Wander";
+        currentMapState = 6;
+        spawnedNPCs[0].GetComponent<NPCController>().mapState = 6;
     }
 
 
