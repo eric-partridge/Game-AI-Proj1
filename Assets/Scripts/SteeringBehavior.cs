@@ -21,10 +21,10 @@ public class SteeringBehavior : MonoBehaviour {
     public float maxAcceleration = 10f;
 
     // For arrive function
-    public float maxSpeed;
-    public float targetRadiusL;
-    public float slowRadiusL;
-    public float timeToTarget;
+    public float maxSpeed = 10f;
+    public float targetRadiusL = 3f;
+    public float slowRadiusL = 5f;
+    public float timeToTarget = 1f;
     public float targetSpeedL;
 
     // For Face function
@@ -64,12 +64,13 @@ public class SteeringBehavior : MonoBehaviour {
         if(distance < slowRadiusL && distance > targetRadiusL)
         {
             //here is the condition we need to think about reduce speed
-            float targetSpeed = maxSpeed * (distance / slowRadiusL);
+            float targetSpeed = maxSpeed * (distance / (slowRadiusL - targetRadiusL));
             Vector3 targetVelocity = direction.normalized * targetSpeed;
             Vector3 linear = targetVelocity - agent.velocity;
             linear /= timeToTarget;
             return linear;
         }
+        
         return new Vector3(0,0,0);
     }
 

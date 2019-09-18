@@ -42,6 +42,14 @@ public class NPCController : MonoBehaviour {
     void FixedUpdate() {
         //mapState = ai.GetComponent<SteeringBehavior>().aiAlgo;
         //print("Map state is: " + mapState);
+
+        //clear the previous line drawn
+        this.DestroyPoints();
+        if (this.tag == "Debugger")
+        {
+            mapState = -1;
+        }
+
         switch (mapState) {
             case -1:
                 break;
@@ -120,6 +128,8 @@ public class NPCController : MonoBehaviour {
         if (label) {
             label.transform.position = Camera.main.WorldToScreenPoint(this.transform.position);
         }
+        //draw the new lines after changing the position
+        this.DrawConcentricCircle(3f);
     }
 
     /// <summary>

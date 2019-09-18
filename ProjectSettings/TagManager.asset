@@ -8,6 +8,7 @@ TagManager:
   - Hunter
   - Red
   - Spawner
+  - Debugger
   layers:
   - Default
   - TransparentFX
