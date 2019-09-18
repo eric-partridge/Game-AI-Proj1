@@ -17,14 +17,14 @@ public class SteeringBehavior : MonoBehaviour {
     // assignments. Only a few of them are needed for the first assignment.
 
     // For pursue and evade functions
-    public float maxPrediction = 3f;
-    public float maxAcceleration = 10f;
+    public float maxPrediction;
+    public float maxAcceleration;
 
     // For arrive function
-    public float maxSpeed = 10f;
-    public float targetRadiusL = 3f;
-    public float slowRadiusL = 5f;
-    public float timeToTarget = 1f;
+    public float maxSpeed;
+    public float targetRadiusL;
+    public float slowRadiusL;
+    public float timeToTarget;
     public float targetSpeedL;
 
     // For Face function
@@ -64,10 +64,18 @@ public class SteeringBehavior : MonoBehaviour {
         if(distance < slowRadiusL && distance > targetRadiusL)
         {
             //here is the condition we need to think about reduce speed
-            float targetSpeed = maxSpeed * (distance / (slowRadiusL - targetRadiusL));
+            float temp = distance - targetRadiusL;
+            float targetSpeed = maxSpeed * (temp / (slowRadiusL - targetRadiusL));
             Vector3 targetVelocity = direction.normalized * targetSpeed;
             Vector3 linear = targetVelocity - agent.velocity;
             linear /= timeToTarget;
+            /*
+             * Note: since linear /= timeToTarget will get the acceleration
+             * we need to perform per time, we need to devide the linear with
+             * another deltaTime in order to make sure the enough acceleration
+             * is applied to the gameobject
+             */
+            linear /= Time.deltaTime;
             return linear;
         }
         
