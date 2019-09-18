@@ -127,8 +127,8 @@ MonoBehaviour:
   velocity: {x: 0, y: 0, z: 0}
   orientation: 0
   rotation: 0
-  maxSpeed: 150
-  maxRotation: 0
+  maxSpeed: 7
+  maxRotation: 10
   mapState: 0
   label: {fileID: 0}
 --- !u!114 &114855803710573834
@@ -143,7 +143,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60c36cfcd6da9ef4aa69fa473b1853e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 150
+  speed: 140
 --- !u!120 &1518826718160175155
 LineRenderer:
   m_ObjectHideFlags: 0

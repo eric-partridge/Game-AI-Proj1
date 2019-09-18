@@ -129,7 +129,6 @@ public class NPCController : MonoBehaviour {
             label.transform.position = Camera.main.WorldToScreenPoint(this.transform.position);
         }
         //draw the new lines after changing the position
-        this.DrawConcentricCircle(3f);
     }
 
     /// <summary>
@@ -166,6 +165,14 @@ public class NPCController : MonoBehaviour {
         rb.AddForce(velocity - rb.velocity, ForceMode.VelocityChange);
         position = rb.position;
         rb.MoveRotation(Quaternion.Euler(new Vector3(0, Mathf.Rad2Deg * orientation, 0)));
+
+        //here is the code for debugger player
+        if (this.tag == "Debugger") {
+            velocity = this.GetComponent<Rigidbody>().velocity;
+            position = this.transform.position;
+            orientation = transform.eulerAngles.y;
+
+        }
     }
 
     // <summary>

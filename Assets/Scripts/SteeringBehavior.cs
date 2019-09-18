@@ -60,6 +60,8 @@ public class SteeringBehavior : MonoBehaviour {
         Vector3 direction = GetDirectionVec();
         float distance = GetDistance();
         print("Checking");
+        //visual effects for target
+        target.DrawConcentricCircle(targetRadiusL);
         //distance check
         if(distance < slowRadiusL && distance > targetRadiusL)
         {
@@ -101,9 +103,9 @@ public class SteeringBehavior : MonoBehaviour {
 
             //get the future location
             Vector3 futureLocation = target.position + (target.velocity * prediction);
-
             //seek for future location
             Vector3 futureAccleration = futureLocation - agent.position;
+            target.DrawCircle(futureLocation, 1.0f);
         
             //clip to max acceleration
             if (futureAccleration.magnitude > maxAcceleration)
