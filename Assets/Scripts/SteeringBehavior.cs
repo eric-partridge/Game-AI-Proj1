@@ -287,10 +287,10 @@ public class SteeringBehavior : MonoBehaviour {
         return steering;
     }
 
-    public float Align()
+    public float Align(Vector3 targetVec)
     {
         //get direction to target
-        Vector3 direction = target.position - agent.position;
+        Vector3 direction = targetVec - agent.position;
         float rotation = Mathf.Atan2(direction.x, direction.z) - agent.orientation;
         float targetRotation, steering, rotationDirection;
 
@@ -342,12 +342,20 @@ public class SteeringBehavior : MonoBehaviour {
         //create struct to hold output
         wanderSteering ret;
 
-        //dekegate to face
-        ret.angular = Align();
+        //delegate to face
+        ret.angular = Align(target.position);
 
-        //set linear acceleration to max
-        ret.linear = maxAcceleration * new Vector3(Mathf.Sin(agent.orientation), 0, Mathf.Cos(agent.orientation));
-        return ret;
+        if ((target.position - agent.position).magnitude < slowRadiusL)
+        {
+            ret.linear = DynamicArrive();
+            return ret;
+        }
+        //else keep max acceleration
+        else
+        {
+            ret.linear = maxAcceleration * new Vector3(Mathf.Sin(agent.orientation), 0, Mathf.Cos(agent.orientation));
+            return ret;
+        }
     }
 
 

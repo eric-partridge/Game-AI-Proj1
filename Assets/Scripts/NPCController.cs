@@ -99,7 +99,7 @@ public class NPCController : MonoBehaviour {
                 }
 
                 linear = Vector3.zero;
-                angular = ai.Align();
+                angular = ai.Align(ai.GetComponent<SteeringBehavior>().target.position);
                 break;
 
             case 5:
@@ -109,7 +109,7 @@ public class NPCController : MonoBehaviour {
                 }
 
                 linear = Vector3.zero;
-                angular = ai.Align();
+                angular = ai.Align(ai.GetComponent<SteeringBehavior>().target.position);
                 break;
 
             case 6:
