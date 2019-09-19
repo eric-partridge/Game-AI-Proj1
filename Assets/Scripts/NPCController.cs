@@ -42,6 +42,14 @@ public class NPCController : MonoBehaviour {
     void FixedUpdate() {
         //mapState = ai.GetComponent<SteeringBehavior>().aiAlgo;
         //print("Map state is: " + mapState);
+
+        //clear the previous line drawn
+        this.DestroyPoints();
+        if (this.tag == "Debugger")
+        {
+            mapState = -1;
+        }
+
         switch (mapState) {
             case -1:
                 break;
@@ -101,7 +109,7 @@ public class NPCController : MonoBehaviour {
                 }
 
                 linear = Vector3.zero;
-                angular = ai.DynamicFace();
+                angular = ai.Align();
                 break;
 
             case 6:
@@ -120,6 +128,7 @@ public class NPCController : MonoBehaviour {
         if (label) {
             label.transform.position = Camera.main.WorldToScreenPoint(this.transform.position);
         }
+        //draw the new lines after changing the position
     }
 
     /// <summary>
@@ -156,6 +165,14 @@ public class NPCController : MonoBehaviour {
         rb.AddForce(velocity - rb.velocity, ForceMode.VelocityChange);
         position = rb.position;
         rb.MoveRotation(Quaternion.Euler(new Vector3(0, Mathf.Rad2Deg * orientation, 0)));
+
+        //here is the code for debugger player
+        if (this.tag == "Debugger") {
+            velocity = this.GetComponent<Rigidbody>().velocity;
+            position = this.transform.position;
+            orientation = transform.eulerAngles.y;
+
+        }
     }
 
     // <summary>
@@ -211,5 +228,14 @@ public class NPCController : MonoBehaviour {
         if (line) {
             line.positionCount = 0;
         }
+    }
+
+
+    //this fucntion is used to show the facing direction
+    public void DrawFaceCircle(float circleRadius, float circleDistance)
+    {
+        Vector3 forwardVec = Quaternion.Euler(this.transform.eulerAngles) * Vector3.forward;
+        forwardVec *= circleDistance;
+        DrawCircle(position + forwardVec, circleRadius);
     }
 }

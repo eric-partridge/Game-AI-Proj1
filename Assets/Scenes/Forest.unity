@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657993, g: 0.49641407, b: 0.5748179, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657993, g: 0.49641424, b: 0.57481825, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -625,25 +625,9 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 0}
-      propertyPath: m_Parameters.colorGradient.m_Mode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: m_ReceiveShadows
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: m_CastShadows
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].value
-      value: 0.15277672
-      objectReference: {fileID: 0}
     - target: {fileID: 1492082692082636, guid: 656f0980c97e88745b50615b4f52aff8, type: 3}
-      propertyPath: m_IsActive
-      value: 1
+      propertyPath: m_Name
+      value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 4668367045740698, guid: 656f0980c97e88745b50615b4f52aff8, type: 3}
       propertyPath: m_LocalPosition.x
@@ -677,15 +661,17 @@ PrefabInstance:
       propertyPath: m_RootOrder
       value: 5
       objectReference: {fileID: 0}
-    - target: {fileID: 114539536265108996, guid: 656f0980c97e88745b50615b4f52aff8,
-        type: 3}
-      propertyPath: maxSpeed
-      value: 150
+    - target: {fileID: 4668367045740698, guid: 656f0980c97e88745b50615b4f52aff8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 114855803710573834, guid: 656f0980c97e88745b50615b4f52aff8,
-        type: 3}
-      propertyPath: speed
-      value: 150
+    - target: {fileID: 4668367045740698, guid: 656f0980c97e88745b50615b4f52aff8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4668367045740698, guid: 656f0980c97e88745b50615b4f52aff8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 656f0980c97e88745b50615b4f52aff8, type: 3}

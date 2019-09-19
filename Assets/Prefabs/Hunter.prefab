@@ -130,7 +130,7 @@ MonoBehaviour:
   orientation: 0
   rotation: 0
   maxSpeed: 4
-  maxRotation: 0
+  maxRotation: 2
   mapState: -1
   label: {fileID: 0}
 --- !u!114 &114839489207466526
@@ -148,13 +148,13 @@ MonoBehaviour:
   agent: {fileID: 114671874507944792}
   target: {fileID: 0}
   maxPrediction: 1
-  maxAcceleration: 4
-  maxSpeed: 4
+  maxAcceleration: 5
+  maxSpeed: 10
   targetRadiusL: 2
   slowRadiusL: 5
   timeToTarget: 0.5
   targetSpeedL: 0
-  maxRotation: 4
+  maxRotation: 2
   maxAngularAcceleration: 4
   targetRadiusA: 0.1
   slowRadiusA: 0.5
