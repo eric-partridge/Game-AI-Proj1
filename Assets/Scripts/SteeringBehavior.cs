@@ -28,10 +28,10 @@ public class SteeringBehavior : MonoBehaviour {
     public float targetSpeedL;
 
     // For Face function
-    public float maxRotation = 1f;
-    public float maxAngularAcceleration = 3f; 
-    public float targetRadiusA = 0.02f;
-    public float slowRadiusA = 0.14f;
+    public float maxRotation;
+    public float maxAngularAcceleration; 
+    public float targetRadiusA;
+    public float slowRadiusA;
 
     // For wander function
     public float wanderOffset;
@@ -105,14 +105,14 @@ public class SteeringBehavior : MonoBehaviour {
             Vector3 futureLocation = target.position + (target.velocity * prediction);
             //seek for future location
             Vector3 futureAccleration = futureLocation - agent.position;
-            target.DrawCircle(futureLocation, 1.0f);
+            
         
             //clip to max acceleration
             if (futureAccleration.magnitude > maxAcceleration)
             {
                 futureAccleration = futureAccleration.normalized * maxAcceleration;
             }
-
+            agent.DrawCircle(futureAccleration + agent.position , 1.0f);
             return futureAccleration;
         }
         else if(distance < slowRadiusL)
@@ -147,6 +147,7 @@ public class SteeringBehavior : MonoBehaviour {
         {
             futureAccleration = futureAccleration.normalized * maxAcceleration;
         }
+        agent.DrawCircle(futureAccleration + agent.position, 1.0f);
 
         return futureAccleration;
     }
@@ -154,58 +155,56 @@ public class SteeringBehavior : MonoBehaviour {
     public float DynamicFace()
     {
         Vector3 direciton = target.position - agent.position;
-        if(direciton.magnitude <= targetRadiusA)
+        float faceRot, faceRotDir, faceRotMag;
+        
+        //get the targetOrientation
+        float targetOrientation = Mathf.Atan2(direciton.x, direciton.z);
+        targetOrientation = MapOrientation(targetOrientation);
+
+        //make sure we will only rotate less then pi, also calculate the
+        //direction of the rotation
+        faceRot = targetOrientation - MapOrientation(agent.orientation);
+        if(faceRot > Mathf.PI)
         {
-            return 0.0f;
+            //if the faceRot is bigger than pi, reverse that rotation
+            faceRot = (2 * Mathf.PI) - faceRot;
         }
-        else
+        faceRotMag = Mathf.Abs(faceRot);
+        faceRotDir = faceRot / faceRotMag;
+        
+
+        //then check should we accelerate or arrive
+        if (faceRotMag > slowRadiusA)
         {
-            //get the targetOrientation
-            float targetOrientation = Mathf.Atan2(-direciton.x, direciton.z);
-
-            //do the calculation
-            //map the orientation to interval (-pi, pi] first
-            targetOrientation = MapOrientation(targetOrientation);
-            float angularAcc = targetOrientation - agent.orientation;
-
-            //check should agent approach or reduce speed
-            if(Mathf.Abs(angularAcc) >= slowRadiusA)
+            //here is the condition for accelerate
+            if (agent.rotation < maxRotation)
             {
-                //if this is approaching
-                if(angularAcc > 0)
+                if (faceRotMag > maxAngularAcceleration)
                 {
-                    if( Mathf.Abs(angularAcc) < maxRotation)
-                    {
-                        return angularAcc;
-                    }
-                    return maxRotation;
-                }
-                else if(angularAcc < 0){
-                    if( Mathf.Abs(angularAcc) < maxRotation)
-                    {
-                        return angularAcc;
-                    }
-                    return -maxRotation;
+                    return (maxAngularAcceleration * faceRotDir);
                 }
                 else
                 {
-                    return 0f;
+                    return faceRot;
                 }
             }
-            else if (Mathf.Abs(angularAcc) < slowRadiusA && Mathf.Abs(angularAcc) > targetRadiusA)
+            else
             {
-                float targetRotation = maxRotation * (angularAcc / slowRadiusA);
-                angularAcc = targetRotation - angularAcc;
-                //over here we need to make sure in next delta time, the rotation is
-                //reduced to the wanting rotation, so we devide the angularAcc with
-                //delta time
-                angularAcc /= Time.deltaTime;
-                return angularAcc;
-                
+                return 0.0f;
             }
-
-            return 0.0f;
         }
+        else if(faceRotMag <= slowRadiusA)
+        {
+            float targetRot = faceRotMag / slowRadiusA;
+            targetRot *= faceRotDir;
+            float targetAngAcc = targetRot - faceRot;
+            float result = targetAngAcc / timeToTarget;
+            result /= Time.deltaTime;
+            return result;
+        }
+             
+        return 0.0f;
+     
     }
 
     //helper functions
@@ -254,6 +253,7 @@ public class SteeringBehavior : MonoBehaviour {
 
         //get direction to player
         steering = target.position - agent.position;
+        agent.DrawCircle(steering, 1.0f);
 
         //calculate distance
         float distance = (target.position - agent.position).magnitude;
@@ -269,6 +269,7 @@ public class SteeringBehavior : MonoBehaviour {
             steering.Normalize();
             steering *= maxAcceleration;
         }
+        agent.DrawCircle(steering + agent.position, 1.0f);
 
         return steering;
     }
@@ -282,6 +283,7 @@ public class SteeringBehavior : MonoBehaviour {
         steering = agent.position - target.position;
         steering.Normalize();
         steering *= maxAcceleration;
+        agent.DrawCircle(steering + agent.position, 1.0f);
         return steering;
     }
 
@@ -318,7 +320,8 @@ public class SteeringBehavior : MonoBehaviour {
             steering /= angularAccel;
             steering *= maxAngularAcceleration;
         }
-       //print("Steering is: " + steering);
+        //print("Steering is: " + steering);
+        agent.DrawFaceCircle(1.0f, 5.0f);
         return steering;
     }
 
@@ -340,7 +343,7 @@ public class SteeringBehavior : MonoBehaviour {
         wanderSteering ret;
 
         //dekegate to face
-        ret.angular = DynamicFace();
+        ret.angular = Align();
 
         //set linear acceleration to max
         ret.linear = maxAcceleration * new Vector3(Mathf.Sin(agent.orientation), 0, Mathf.Cos(agent.orientation));

@@ -109,7 +109,7 @@ public class NPCController : MonoBehaviour {
                 }
 
                 linear = Vector3.zero;
-                angular = ai.DynamicFace();
+                angular = ai.Align();
                 break;
 
             case 6:
@@ -228,5 +228,14 @@ public class NPCController : MonoBehaviour {
         if (line) {
             line.positionCount = 0;
         }
+    }
+
+
+    //this fucntion is used to show the facing direction
+    public void DrawFaceCircle(float circleRadius, float circleDistance)
+    {
+        Vector3 forwardVec = Quaternion.Euler(this.transform.eulerAngles) * Vector3.forward;
+        forwardVec *= circleDistance;
+        DrawCircle(position + forwardVec, circleRadius);
     }
 }
